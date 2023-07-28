@@ -1,0 +1,66 @@
+{
+  "name": "nestjs-cucumber-kit",
+  "version": "0.0.0",
+  "description": "Nestjs cucumber kit",
+  "author": "Talwinder Singh",
+  "license": "MIT",
+  "url": "https://github.com/iamtalwinder/nestjs-cucumber-kit.git#readme",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf -rf dist && tsc -p tsconfig.json",
+    "format": "prettier --write \"{lib,test}/**/*.ts\"",
+    "lint": "eslint 'lib/**/*.ts' --fix",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish --access public",
+    "prepublish:next": "npm run build",
+    "publish:next": "npm publish --access public --tag next",
+    "test:e2e": "jest --config ./tests/jest-e2e.json --runInBand",
+    "test:unit": "jest --config ./jest.json --roots ./lib",
+    "prerelease": "npm run build",
+    "release": "release-it",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-angular": "18.4.3",
+    "@nestjs/common": "10.2.10",
+    "@nestjs/core": "10.2.10",
+    "@nestjs/platform-express": "10.2.10",
+    "@nestjs/testing": "10.2.10",
+    "@types/jest": "29.5.11",
+    "@types/node": "20.10.3",
+    "@typescript-eslint/eslint-plugin": "6.13.2",
+    "@typescript-eslint/parser": "6.13.2",
+    "eslint": "8.55.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.29.0",
+    "husky": "8.0.3",
+    "jest": "29.7.0",
+    "lint-staged": "15.2.0",
+    "prettier": "3.1.0",
+    "reflect-metadata": "0.1.13",
+    "release-it": "17.0.0",
+    "rimraf": "5.0.5",
+    "rxjs": "7.8.1",
+    "ts-jest": "29.1.1",
+    "typescript": "5.3.3"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0",
+    "@nestjs/core": "^8.0.0 || ^9.0.0 || ^10.0.0",
+    "reflect-metadata": "^0.1.12"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamtalwinder/nestjs-package-starter"
+  }
+}
