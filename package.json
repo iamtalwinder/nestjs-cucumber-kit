@@ -22,6 +22,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@cucumber/cucumber": "^10.0.1",
+    "chai": "^4.3.10"
   },
   "devDependencies": {
     "@commitlint/cli": "18.4.3",
@@ -30,8 +32,10 @@
     "@nestjs/core": "10.2.10",
     "@nestjs/platform-express": "10.2.10",
     "@nestjs/testing": "10.2.10",
+    "@types/chai": "^4.3.11",
     "@types/jest": "29.5.11",
     "@types/node": "20.10.3",
+    "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
     "eslint": "8.55.0",
