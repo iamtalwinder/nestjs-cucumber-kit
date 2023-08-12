@@ -1,4 +1,4 @@
-import { HttpSteps, ICucumberKitConfig, StorageSteps } from 'nestjs-cucumber-kit';
+import { HttpSteps, ICucumberKitConfig, StorageSteps } from '../../lib';
 import * as path from 'path';
 
 export const config: ICucumberKitConfig = {

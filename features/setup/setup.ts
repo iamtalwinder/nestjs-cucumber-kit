@@ -1,5 +1,5 @@
 import { setWorldConstructor } from '@cucumber/cucumber';
-import { configureSteps } from 'nestjs-cucumber-kit';
+import { configureSteps } from '../../lib';
 import { config } from './config';
 import { CustomWorld } from './world';
 

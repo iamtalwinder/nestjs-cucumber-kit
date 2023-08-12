@@ -1,10 +1,7 @@
 {
  "extends": "../tsconfig.json",
  "compilerOptions": {
-    "outDir": "./features",
-    "paths": {
-      "nestjs-cucumber-kit": ["../lib"]
-    },
+    "outDir": "./features-dist",
     "rootDir": "../"
   },
  "include": ["./"],

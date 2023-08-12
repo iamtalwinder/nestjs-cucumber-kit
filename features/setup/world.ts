@@ -1,4 +1,4 @@
-import { AbstractWorld } from 'nestjs-cucumber-kit';
+import { AbstractWorld } from '../../lib';
 import { AppModule } from '../app/app.module';
 import { config } from './config';
 

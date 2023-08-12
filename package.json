@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "@cucumber/cucumber": "^10.0.1",
-    "chai": "^4.3.10"
+    "chai": "^4.3.10",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "@commitlint/cli": "18.4.3",
