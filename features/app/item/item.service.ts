@@ -1,13 +1,8 @@
 import { Injectable } from '@nestjs/common';
-
-export interface Item {
-  id: string;
-  name: string;
-  // other properties can be added as needed
-}
+import { Item } from './entities';
 
 @Injectable()
-export class AppService {
+export class ItemService {
   private items: Item[] = [{ id: '1', name: 'test' }];
 
   getAll(): Item[] {
@@ -20,9 +15,8 @@ export class AppService {
 
   create(itemData: { name: string }): Item {
     const newItem: Item = {
-      id: Math.random().toString(36).substring(2, 9), // simple random ID generator
+      id: Math.random().toString(36).substring(2, 9),
       name: itemData.name,
-      // set other properties from itemData as needed
     };
     this.items.push(newItem);
     return newItem;
@@ -32,7 +26,6 @@ export class AppService {
     const item = this.items.find(item => item.id === id);
     if (item) {
       item.name = itemData.name ?? item.name;
-      // update other properties as needed
       return item;
     }
     return undefined;

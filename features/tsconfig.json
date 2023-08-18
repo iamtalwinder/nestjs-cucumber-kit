@@ -1,8 +1,9 @@
 {
  "extends": "../tsconfig.json",
  "compilerOptions": {
-    "outDir": "./features-dist",
-    "rootDir": "../"
+    "outDir": "./dist",
+    "rootDir": "../",
+    "sourceMap": false
   },
  "include": ["./"],
  "exclude": ["node_modules"]

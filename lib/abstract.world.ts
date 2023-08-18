@@ -21,8 +21,8 @@ export class AbstractWorld {
     }).compile();
 
     this.app = moduleFixture.createNestApplication();
-    await this.app.init();
     await this.configureApp();
+    await this.app.init();
   }
 
   async stopApp(): Promise<void> {
