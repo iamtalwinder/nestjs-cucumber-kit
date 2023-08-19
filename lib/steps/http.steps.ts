@@ -4,6 +4,7 @@ import supertest from 'supertest';
 import { AbstractWorld } from '../abstract.world';
 import { IStepDefinition } from './step-definition.interface';
 import { SharedStorage } from '..';
+import { INestApplication } from '@nestjs/common';
 
 export class HttpSteps implements IStepDefinition {
   defineSteps() {
@@ -18,8 +19,9 @@ export class HttpSteps implements IStepDefinition {
     Given(
       /^I send a (GET|POST|PUT|DELETE) request to API "([^"]*)"$/,
       async function (this: AbstractWorld, method: string, endpoint: string) {
-        const processedEndpoint = SharedStorage.replacePlaceholders(endpoint);
-        const response = await supertest(this.app?.getHttpServer())[method.toLowerCase()](processedEndpoint);
+        const request = HttpSteps.getReqeust(this.app, method, endpoint);
+
+        const response = await request.send();
         SharedStorage.set('response', response);
       },
     );
@@ -27,13 +29,20 @@ export class HttpSteps implements IStepDefinition {
     Given(
       /^I send a (GET|POST|PUT|DELETE) request to API "([^"]*)" with JSON:$/,
       async function (this: AbstractWorld, method: string, endpoint: string, body: string) {
-        const processedEndpoint = SharedStorage.replacePlaceholders(endpoint);
         const processedBody = JSON.parse(SharedStorage.replacePlaceholders(body));
-        const response = await supertest(this.app?.getHttpServer())
-          [method.toLowerCase()](processedEndpoint)
-          .send(processedBody);
+        const request = HttpSteps.getReqeust(this.app, method, endpoint);
 
+        const response = await request.send(processedBody);
         SharedStorage.set('response', response);
+      },
+    );
+
+    Given(
+      /^I set the request header "([^"]*)" to "([^"]*)"$/,
+      function (this: AbstractWorld, headerName: string, headerValue: string) {
+        const headers = SharedStorage.get('headers') || {};
+        headers[headerName] = headerValue;
+        SharedStorage.set('headers', headers);
       },
     );
 
@@ -51,5 +60,19 @@ export class HttpSteps implements IStepDefinition {
       const response = SharedStorage.get('response');
       expect(response.body).to.deep.equal(JSON.parse(docString));
     });
+  }
+
+  static getReqeust(app: INestApplication | null, method: string, endpoint: string): any {
+    const processedEndpoint = SharedStorage.replacePlaceholders(endpoint);
+
+    const request = supertest(app?.getHttpServer())[method.toLowerCase()](processedEndpoint);
+
+    const headers = SharedStorage.get('headers') || {};
+
+    for (const [key, value] of Object.entries(headers)) {
+      request.set(key, value);
+    }
+
+    return request;
   }
 }

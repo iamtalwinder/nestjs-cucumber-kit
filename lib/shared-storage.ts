@@ -11,6 +11,10 @@ export class SharedStorage {
     return SharedStorage.storage[key];
   }
 
+  static clear() {
+    SharedStorage.storage = {};
+  }
+
   static loadJsonFile(absolutePath: string): void {
     const fileContent = fs.readFileSync(absolutePath, 'utf8');
     const jsonData = JSON.parse(fileContent);
@@ -18,10 +22,6 @@ export class SharedStorage {
     Object.entries(jsonData).forEach(([key, value]) => {
       SharedStorage.set(key, value);
     });
-  }
-
-  static clear() {
-    SharedStorage.storage = {};
   }
 
   static replacePlaceholders(text: string): string {
@@ -32,5 +32,16 @@ export class SharedStorage {
       }
       return value;
     });
+  }
+
+  static getGlobalHeaders(): Record<string, string> {
+    const globalHeaders = {};
+    for (const [key, value] of Object.entries(SharedStorage.storage)) {
+      if (key.startsWith('globalHeader_')) {
+        const headerName = key.replace('globalHeader_', '');
+        globalHeaders[headerName] = value;
+      }
+    }
+    return globalHeaders;
   }
 }

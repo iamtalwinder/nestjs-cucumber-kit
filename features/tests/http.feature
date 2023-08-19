@@ -23,3 +23,11 @@ Feature: HTTP
       {}
       """
     Then the response code should be 400
+
+  Scenario: Send Request with custom header
+    Given I set the request header "Authorization" to "Bearer token"
+    When I send a POST request to API "/item" with JSON:
+      """
+      { "name": "New Item" }
+      """
+    Then the response code should be 201
