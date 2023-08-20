@@ -28,7 +28,7 @@ Feature: storage
     Given I store the key "itemId" with the value "1"
     Given I send a GET request to API "/item/{{itemId}}"
     Then the response code should be 200
-    And the response should contain JSON
+    And the response should contain JSON:
       """
       { "id": "1", "name": "test" }
       """

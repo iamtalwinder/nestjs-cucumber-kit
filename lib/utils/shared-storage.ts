@@ -33,15 +33,4 @@ export class SharedStorage {
       return value;
     });
   }
-
-  static getGlobalHeaders(): Record<string, string> {
-    const globalHeaders = {};
-    for (const [key, value] of Object.entries(SharedStorage.storage)) {
-      if (key.startsWith('globalHeader_')) {
-        const headerName = key.replace('globalHeader_', '');
-        globalHeaders[headerName] = value;
-      }
-    }
-    return globalHeaders;
-  }
 }

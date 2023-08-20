@@ -9,6 +9,8 @@ export class AbstractWorld {
   protected config: ICucumberKitConfig;
   public app: INestApplication | null;
 
+  protected requestData: any;
+
   constructor(appModule: Module, config: ICucumberKitConfig) {
     this.appModule = appModule;
     this.config = config;

@@ -2,10 +2,18 @@
 
 Feature: HTTP
 
-  Scenario: Get an item
+  Scenario: Get an item - partial match
     Given I send a GET request to API "/item"
     Then the response code should be 200
-    And the response should contain JSON
+    And the response should contain JSON:
+      """
+      [{ "id": "1" }]
+      """
+
+  Scenario: Get an item - exactly match
+    Given I send a GET request to API "/item"
+    Then the response code should be 200
+    And the response should exactly match JSON:
       """
       [{ "id": "1", "name": "test" }]
       """
