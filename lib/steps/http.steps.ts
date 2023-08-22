@@ -73,6 +73,17 @@ export class HttpSteps implements IStepDefinition {
       },
     );
 
+    Given(
+      /^I send a GraphQL request to "([^"]*)" with the payload:$/,
+      async function (this: AbstractWorld, endpoint: string, payload: string) {
+        const graphqlPayload = { query: payload };
+        const request = HttpSteps.getReqeust.call(this, 'post', endpoint);
+        const response = await request.send(graphqlPayload);
+
+        SharedStorage.set('response', response);
+      },
+    );
+
     Then(/^I store the response in key "([^"]*)"$/, function (this: AbstractWorld, key: string) {
       const response = SharedStorage.get('response');
       SharedStorage.set(key, response?.body);
