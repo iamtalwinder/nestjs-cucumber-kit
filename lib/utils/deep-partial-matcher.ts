@@ -1,21 +1,27 @@
 export class DeepPartialMatcher {
   static containsPartialDeep(actual, expected) {
+    const match = this.isPartialDeepMatch(actual, expected);
+
+    if (!match) {
+      throw new Error(`Mismatch found. Actual object: ${JSON.stringify(actual)}`);
+    }
+
     if (Array.isArray(expected)) {
       if (!Array.isArray(actual)) {
         throw new Error('Expected an array for deep partial matching.');
       }
+
+      let arrayMatch = true;
       expected.forEach(expectedItem => {
         const matchingItem = actual.find(actualItem => this.isPartialDeepMatch(actualItem, expectedItem));
         if (!matchingItem) {
-          throw new Error(`Expected item not found: ${JSON.stringify(expectedItem)}`);
+          arrayMatch = false;
         }
       });
-    } else if (expected instanceof Object) {
-      if (!this.isPartialDeepMatch(actual, expected)) {
-        throw new Error(`Expected object not found: ${JSON.stringify(expected)}`);
+
+      if (!arrayMatch) {
+        throw new Error(`Array mismatch. Actual array: ${JSON.stringify(actual)}`);
       }
-    } else {
-      throw new Error('Invalid type for deep partial matching.');
     }
   }
 
