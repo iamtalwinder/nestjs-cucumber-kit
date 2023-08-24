@@ -37,5 +37,32 @@ describe('DeepPartialMatcher', () => {
       const expected = { id: '1', details: { age: 30 } };
       expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).not.toThrow();
     });
+
+    it('should match with a wildcard for dynamic values', () => {
+      const actual = { id: '123', name: 'test' };
+      const expected = { id: '*', name: 'test' };
+      expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).not.toThrow();
+    });
+
+    it('should match nested objects with a wildcard', () => {
+      const actual = { id: '1', details: { age: 30, city: 'New York' } };
+      const expected = { id: '1', details: { age: '*', city: 'New York' } };
+      expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).not.toThrow();
+    });
+
+    it('should match in arrays with a wildcard', () => {
+      const actual = [
+        { id: '1', name: 'test' },
+        { id: '2', name: 'example' },
+      ];
+      const expected = [{ id: '*', name: 'test' }];
+      expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).not.toThrow();
+    });
+
+    it('should throw an error for non-matching arrays with a wildcard', () => {
+      const actual = [{ id: '2', name: 'example' }];
+      const expected = [{ id: '*', name: 'test' }];
+      expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).toThrow();
+    });
   });
 });

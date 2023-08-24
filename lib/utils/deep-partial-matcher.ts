@@ -27,6 +27,10 @@ export class DeepPartialMatcher {
 
   static isPartialDeepMatch(obj, source) {
     return Object.keys(source).every(key => {
+      if (source[key] === '*') {
+        return true;
+      }
+
       if (source[key] instanceof Object && obj[key] instanceof Object) {
         return this.isPartialDeepMatch(obj[key], source[key]);
       }
