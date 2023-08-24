@@ -21,7 +21,7 @@ export class HttpSteps implements IStepDefinition {
     Given(
       /^I send a (GET|POST|PUT|DELETE) request to API "([^"]*)"$/,
       async function (this: AbstractWorld, method: string, endpoint: string) {
-        const request = HttpSteps.getReqeust.call(this, method, endpoint);
+        const request = HttpSteps.getRequest.call(this, method, endpoint);
 
         if (this.requestData && this.requestData.files) {
           for (const [fieldName, filePath] of Object.entries(this.requestData.files)) {
@@ -38,7 +38,7 @@ export class HttpSteps implements IStepDefinition {
       /^I send a (GET|POST|PUT|DELETE) request to API "([^"]*)" with JSON:$/,
       async function (this: AbstractWorld, method: string, endpoint: string, body: string) {
         const processedBody = JSON.parse(SharedStorage.replacePlaceholders(body));
-        const request = HttpSteps.getReqeust.call(this, method, endpoint);
+        const request = HttpSteps.getRequest.call(this, method, endpoint);
 
         const response = await request.send(processedBody);
         SharedStorage.set('response', response);
@@ -77,7 +77,7 @@ export class HttpSteps implements IStepDefinition {
       /^I send a GraphQL request to "([^"]*)" with the payload:$/,
       async function (this: AbstractWorld, endpoint: string, payload: string) {
         const graphqlPayload = { query: payload };
-        const request = HttpSteps.getReqeust.call(this, 'post', endpoint);
+        const request = HttpSteps.getRequest.call(this, 'post', endpoint);
         const response = await request.send(graphqlPayload);
 
         SharedStorage.set('response', response);
@@ -102,14 +102,14 @@ export class HttpSteps implements IStepDefinition {
     Then(/^the response should be boolean (.*)$/, function (this: AbstractWorld, expectedResponse: string) {
       const actualResponse = SharedStorage.get('response').text;
       const expectedBoolean = expectedResponse === 'true';
-      expect(actualResponse === 'true' || actualResponse === 'false').to.be.true; // Ensure it's a boolean response
+      expect(actualResponse === 'true' || actualResponse === 'false').to.be.true;
       expect(actualResponse === 'true').to.equal(expectedBoolean);
     });
 
     Then(/^the response should be number (.*)$/, function (this: AbstractWorld, expectedResponse: string) {
       const actualResponse = SharedStorage.get('response').text;
       const expectedNumber = Number(expectedResponse);
-      expect(!isNaN(expectedNumber)).to.be.true; // Ensure expected is a valid number
+      expect(!isNaN(expectedNumber)).to.be.true;
       expect(Number(actualResponse)).to.equal(expectedNumber);
     });
 
@@ -128,7 +128,7 @@ export class HttpSteps implements IStepDefinition {
     });
   }
 
-  static getReqeust(this: AbstractWorld, method: string, endpoint: string): any {
+  static getRequest(this: AbstractWorld, method: string, endpoint: string): any {
     const processedEndpoint = SharedStorage.replacePlaceholders(endpoint);
 
     const request = supertest(this.app?.getHttpServer())[method.toLowerCase()](processedEndpoint);
