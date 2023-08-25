@@ -1,33 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { Item } from './entities';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Item, ItemDocument } from './entities';
 
 @Injectable()
 export class ItemService {
-  private items: Item[] = [{ id: '1', name: 'test' }];
+  constructor(@InjectModel(Item.name) private itemModel: Model<ItemDocument>) {}
 
-  getAll(): Item[] {
-    return this.items;
+  async getAll(): Promise<Item[]> {
+    return this.itemModel.find().exec();
   }
 
-  getOne(id: string): Item | undefined {
-    return this.items.find(item => item.id === id);
-  }
-
-  create(itemData: { name: string }): Item {
-    const newItem: Item = {
-      id: Math.random().toString(36).substring(2, 9),
-      name: itemData.name,
-    };
-    this.items.push(newItem);
-    return newItem;
-  }
-
-  update(id: string, itemData: { name?: string }): Item | undefined {
-    const item = this.items.find(item => item.id === id);
-    if (item) {
-      item.name = itemData.name ?? item.name;
-      return item;
+  async getOne(id: string): Promise<Item> {
+    const item = await this.itemModel.findById(id).exec();
+    if (!item) {
+      throw new NotFoundException(`Item with ID ${id} not found`);
     }
-    return undefined;
+    return item;
+  }
+
+  async create(itemData: { name: string }): Promise<Item> {
+    const newItem = new this.itemModel(itemData);
+    return newItem.save();
+  }
+
+  async update(id: string, itemData: { name?: string }): Promise<Item> {
+    const updatedItem = await this.itemModel.findByIdAndUpdate(id, itemData, { new: true }).exec();
+    if (!updatedItem) {
+      throw new NotFoundException(`Item with ID ${id} not found`);
+    }
+    return updatedItem;
   }
 }
