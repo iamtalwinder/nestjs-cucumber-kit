@@ -8,22 +8,22 @@ export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Get()
-  getAllItems(): Item[] {
+  getAllItems(): Promise<Item[]> {
     return this.itemService.getAll();
   }
 
   @Get(':id')
-  getItem(@Param('id') id: string): Item {
+  getItem(@Param('id') id: string): Promise<Item> {
     return this.itemService.getOne(id);
   }
 
   @Post()
-  createItem(@Body() createItemDto: ItemDto): Item {
+  createItem(@Body() createItemDto: ItemDto): Promise<Item> {
     return this.itemService.create(createItemDto);
   }
 
   @Put(':id')
-  updateItem(@Param('id') id: string, @Body() updateItemDto: ItemDto): Item {
+  updateItem(@Param('id') id: string, @Body() updateItemDto: ItemDto): Promise<Item> {
     return this.itemService.update(id, updateItemDto);
   }
 }

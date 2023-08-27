@@ -2,12 +2,15 @@
 
 Feature: GraphQL API interaction
 
+  Background: Load data
+    Given I load fixture from the file "fixture/item.fixture"
+
   Scenario: Retrieve an item by ID
     Given I send a GraphQL request to "/graphql" with the payload:
       """
       query {
         getItem(id: "1") {
-          id
+          _id
           name
         }
       }
@@ -17,7 +20,7 @@ Feature: GraphQL API interaction
       {
         "data": {
           "getItem": {
-            "id": "1",
+            "_id": "1",
             "name": "test"
           }
         }
@@ -29,7 +32,7 @@ Feature: GraphQL API interaction
       """
       mutation {
         createItem(createItemInput: { name: "New Item" }) {
-          id
+          _id
           name
         }
       }
@@ -39,7 +42,7 @@ Feature: GraphQL API interaction
       {
         "data": {
           "createItem": {
-            "id": "*",
+            "_id": "*",
             "name": "New Item"
           }
         }
@@ -51,17 +54,17 @@ Feature: GraphQL API interaction
       """
       mutation {
         updateItem(id: "1", updateItemInput: { name: "Updated Item" }) {
-          id
+          _id
           name
         }
       }
       """
-    Then the response should contain JSON:
+    Then the response should exactly match JSON:
       """
       {
         "data": {
           "updateItem": {
-            "id": "1",
+            "_id": "1",
             "name": "Updated Item"
           }
         }

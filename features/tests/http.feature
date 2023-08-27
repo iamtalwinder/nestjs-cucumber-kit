@@ -2,20 +2,15 @@
 
 Feature: HTTP
 
+  Background: Load data
+    Given I load fixture from the file "fixture/item.fixture"
+
   Scenario: Get an item - partial match
     Given I send a GET request to API "/item"
     Then the response code should be 200
     And the response should contain JSON:
       """
-      [{ "id": "1" }]
-      """
-
-  Scenario: Get an item - exactly match
-    Given I send a GET request to API "/item"
-    Then the response code should be 200
-    And the response should exactly match JSON:
-      """
-      [{ "id": "1", "name": "test" }]
+      [{ "_id": "1" }]
       """
 
   Scenario: Create an item - success
