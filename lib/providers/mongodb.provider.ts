@@ -1,9 +1,12 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { TestingModuleBuilder } from '@nestjs/testing';
-import { AbstractProvider } from './abstract-provider';
 import { createConnection } from 'mongoose';
+import { IProvider } from './abstract-provider.interface';
 
-export class MongoDBProvider extends AbstractProvider {
+const MONGODB_CONNECTION_NAME = 'MongooseConnectionName';
+const DATABASE_CONNECTION = 'DatabaseConnection';
+
+export class MongoDBProvider implements IProvider {
   private mongodb: MongoMemoryServer | null = null;
 
   async configureTestEnvironment(builder: TestingModuleBuilder) {
@@ -12,8 +15,8 @@ export class MongoDBProvider extends AbstractProvider {
     }
     const uri = this.mongodb.getUri();
 
-    builder.overrideProvider('MongooseConnectionName').useValue('DatabaseConnection');
-    builder.overrideProvider('DatabaseConnection').useFactory({
+    builder.overrideProvider(MONGODB_CONNECTION_NAME).useValue(DATABASE_CONNECTION);
+    builder.overrideProvider(DATABASE_CONNECTION).useFactory({
       factory: async () => {
         return createConnection(uri);
       },

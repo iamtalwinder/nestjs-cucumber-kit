@@ -1,2 +1,2 @@
-export * from './abstract-provider';
-export * from './mongo-db.provider';
+export * from './abstract-provider.interface';
+export * from './mongodb.provider';
