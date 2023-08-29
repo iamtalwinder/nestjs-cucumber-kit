@@ -1,7 +1,8 @@
 import { INestApplication, NestModule, Type } from '@nestjs/common';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { ICucumberKitConfig } from './config.interface';
-import { AbstractProvider } from './providers';
+import { IProvider } from './providers';
+import { SharedStorage } from './utils';
 
 type Module = Type<NestModule> | any;
 
@@ -12,7 +13,7 @@ export class AbstractWorld {
 
   protected requestData: any;
 
-  private providerInstances: AbstractProvider[] = [];
+  private providerInstances: IProvider[] = [];
 
   constructor(appModule: Module, config: ICucumberKitConfig) {
     this.appModule = appModule;
@@ -42,6 +43,8 @@ export class AbstractWorld {
       await this.app.close();
       this.app = null;
     }
+
+    SharedStorage.clear();
   }
 
   private async configureApp(): Promise<void> {

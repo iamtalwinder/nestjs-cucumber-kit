@@ -8,6 +8,14 @@ import { IStepDefinition } from './step-definition.interface';
 import { SharedStorage } from '..';
 import { DeepPartialMatcher } from '../utils';
 
+const API_RESPONSE_KEY = 'api_response';
+const REQUEST_DATA_KEY = 'request_data';
+
+interface IRequestData {
+  files: { [key: string]: any };
+  headers: { [key: string]: any };
+}
+
 export class HttpSteps implements IStepDefinition {
   defineSteps() {
     Before(async function (this: AbstractWorld) {
@@ -23,14 +31,16 @@ export class HttpSteps implements IStepDefinition {
       async function (this: AbstractWorld, method: string, endpoint: string) {
         const request = HttpSteps.getRequest.call(this, method, endpoint);
 
-        if (this.requestData && this.requestData.files) {
-          for (const [fieldName, filePath] of Object.entries(this.requestData.files)) {
+        const requestData: IRequestData = HttpSteps.getRequestData();
+
+        if (requestData && requestData.files) {
+          for (const [fieldName, filePath] of Object.entries(requestData.files)) {
             request.attach(fieldName, filePath);
           }
         }
 
         const response = await request;
-        SharedStorage.set('response', response);
+        SharedStorage.set(API_RESPONSE_KEY, response);
       },
     );
 
@@ -41,16 +51,16 @@ export class HttpSteps implements IStepDefinition {
         const request = HttpSteps.getRequest.call(this, method, endpoint);
 
         const response = await request.send(processedBody);
-        SharedStorage.set('response', response);
+        SharedStorage.set(API_RESPONSE_KEY, response);
       },
     );
 
     Given(
       /^I set the request header "([^"]*)" to "([^"]*)"$/,
       function (this: AbstractWorld, headerName: string, headerValue: string) {
-        const headers = SharedStorage.get('headers') || {};
+        const requestData: IRequestData = HttpSteps.getRequestData();
+        const headers = requestData.headers || {};
         headers[headerName] = headerValue;
-        SharedStorage.set('headers', headers);
       },
     );
 
@@ -65,11 +75,8 @@ export class HttpSteps implements IStepDefinition {
           throw new Error(`File not found: ${absolutePath}`);
         }
 
-        if (!this.requestData) {
-          this.requestData = { files: {} };
-        }
-
-        this.requestData.files[formFieldName] = absolutePath;
+        const requestData: IRequestData = HttpSteps.getRequestData();
+        requestData.files[formFieldName] = absolutePath;
       },
     );
 
@@ -80,34 +87,34 @@ export class HttpSteps implements IStepDefinition {
         const request = HttpSteps.getRequest.call(this, 'post', endpoint);
         const response = await request.send(graphqlPayload);
 
-        SharedStorage.set('response', response);
+        SharedStorage.set(API_RESPONSE_KEY, response);
       },
     );
 
     Then(/^I store the response in key "([^"]*)"$/, function (this: AbstractWorld, key: string) {
-      const response = SharedStorage.get('response');
+      const response = SharedStorage.get(API_RESPONSE_KEY);
       SharedStorage.set(key, response?.body);
     });
 
     Then(/^the response code should be (\d+)$/, function (this: AbstractWorld, expectedStatusCode: number) {
-      const response = SharedStorage.get('response');
+      const response = SharedStorage.get(API_RESPONSE_KEY);
       expect(response.status).to.equal(expectedStatusCode);
     });
 
     Then(/^the response should be string "(.*)"$/, function (this: AbstractWorld, expectedResponse: string) {
-      const actualResponse = SharedStorage.get('response').text;
+      const actualResponse = SharedStorage.get(API_RESPONSE_KEY).text;
       expect(actualResponse).to.equal(expectedResponse);
     });
 
     Then(/^the response should be boolean (.*)$/, function (this: AbstractWorld, expectedResponse: string) {
-      const actualResponse = SharedStorage.get('response').text;
+      const actualResponse = SharedStorage.get(API_RESPONSE_KEY).text;
       const expectedBoolean = expectedResponse === 'true';
       expect(actualResponse === 'true' || actualResponse === 'false').to.be.true;
       expect(actualResponse === 'true').to.equal(expectedBoolean);
     });
 
     Then(/^the response should be number (.*)$/, function (this: AbstractWorld, expectedResponse: string) {
-      const actualResponse = SharedStorage.get('response').text;
+      const actualResponse = SharedStorage.get(API_RESPONSE_KEY).text;
       const expectedNumber = Number(expectedResponse);
       expect(!isNaN(expectedNumber)).to.be.true;
       expect(Number(actualResponse)).to.equal(expectedNumber);
@@ -115,25 +122,40 @@ export class HttpSteps implements IStepDefinition {
 
     Then(/^the response should exactly match JSON:$/, function (this: AbstractWorld, docString: string) {
       const expectedContent = JSON.parse(docString);
-      const actualContent = SharedStorage.get('response').body;
+      const actualContent = SharedStorage.get(API_RESPONSE_KEY).body;
 
       expect(actualContent).to.deep.equal(expectedContent);
     });
 
     Then(/^the response should contain JSON:$/, function (this: AbstractWorld, docString: string) {
       const expectedPartialContent = JSON.parse(docString);
-      const actualContent = SharedStorage.get('response').body;
+      const actualContent = SharedStorage.get(API_RESPONSE_KEY).body;
 
       DeepPartialMatcher.containsPartialDeep(actualContent, expectedPartialContent);
     });
   }
 
+  static getRequestData() {
+    const requestData: IRequestData = SharedStorage.get(REQUEST_DATA_KEY);
+
+    if (!requestData) {
+      const defaultData = { files: {}, headers: {} };
+      SharedStorage.set(REQUEST_DATA_KEY, defaultData);
+      return defaultData;
+    }
+
+    return requestData;
+  }
+
+  static getHeaders() {
+    const requestData: IRequestData = HttpSteps.getRequestData();
+    return requestData.headers || {};
+  }
+
   static getRequest(this: AbstractWorld, method: string, endpoint: string): any {
     const processedEndpoint = SharedStorage.replacePlaceholders(endpoint);
-
     const request = supertest(this.app?.getHttpServer())[method.toLowerCase()](processedEndpoint);
-
-    const headers = SharedStorage.get('headers') || {};
+    const headers = HttpSteps.getHeaders();
 
     for (const [key, value] of Object.entries(headers)) {
       request.set(key, value);
