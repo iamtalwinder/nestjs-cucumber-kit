@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+node_modules
 
 # IDE
 /.idea
@@ -18,3 +18,5 @@ npm-debug.log
 # dist
 dist
 .env
+
+prev/

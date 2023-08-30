@@ -22,19 +22,5 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off'
-  },
-  overrides: [
-    {
-      files: ['*spec.ts'],
-      parserOptions: {
-        project: 'tsconfig.spec.json',
-      },
-    },
-    {
-      files: ['features/**'],
-      parserOptions: {
-        project: './features/tsconfig.json',
-      },
-    },
-  ],
+  }
 };
