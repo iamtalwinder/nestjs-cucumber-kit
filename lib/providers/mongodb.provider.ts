@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { TestingModuleBuilder } from '@nestjs/testing';
 import { createConnection } from 'mongoose';
-import { IProvider } from './abstract-provider.interface';
+import { IProvider } from './provider.interface';
 
 const MONGODB_CONNECTION_NAME = 'MongooseConnectionName';
 const DATABASE_CONNECTION = 'DatabaseConnection';
