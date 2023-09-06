@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
-import { BaseFixture } from '../../../lib';
+import { BaseFixture } from '@nestjs-cucumber-kit/core';
 import { Item, ItemDocument } from '../../app/item';
 
 export default class ItemFixture extends BaseFixture {
