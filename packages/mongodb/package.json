@@ -1,20 +1,19 @@
 {
   "name": "@nestjs-cucumber-kit/mongodb",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Nestjs cucumber kit mongodb",
   "author": "Talwinder Singh",
   "license": "MIT",
   "url": "https://github.com/iamtalwinder/nestjs-cucumber-kit.git#readme",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "format": "prettier --write ./**/*.ts",
     "lint": "eslint './**/*.ts' --fix",
     "build": "rimraf -rf dist && tsc -p tsconfig.json",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public",
-    "prepublish:next": "npm run build",
-    "publish:next": "npm publish --access public --tag next",
-    "prerelease": "npm run build",
-    "release": "release-it",
+    "publish:beta": "npm publish --access public --tag beta",
     "test:unit": "jest --config ./jest.json --roots ./",
     "test:e2e": "cucumber-js"
   },
@@ -23,7 +22,7 @@
     "@types/mongodb-memory-server": "^2.3.0"
   },
   "peerDependencies": {
-    "@nestjs-cucumber-kit/core": "^1.0.0",
+    "@nestjs-cucumber-kit/core": "^2.0.0",
     "@nestjs/mongoose": "^9.0.0 || ^10.0.0",
     "mongoose": "^7.0.0 || ^8.0.0"
   },
