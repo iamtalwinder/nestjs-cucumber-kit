@@ -60,7 +60,7 @@ export class HttpSteps implements IStepDefinition {
       function (this: AbstractWorld, headerName: string, headerValue: string) {
         const requestData: IRequestData = HttpSteps.getRequestData();
         const headers = requestData.headers || {};
-        headers[headerName] = headerValue;
+        headers[headerName] = SharedStorage.replacePlaceholders(headerValue);
       },
     );
 
@@ -122,14 +122,14 @@ export class HttpSteps implements IStepDefinition {
     });
 
     Then(/^the response should exactly match JSON:$/, function (this: AbstractWorld, docString: string) {
-      const expectedContent = JSON.parse(docString);
+      const expectedContent = JSON.parse(SharedStorage.replacePlaceholders(docString));
       const actualContent = SharedStorage.get(API_RESPONSE_KEY).body;
 
       expect(actualContent).to.deep.equal(expectedContent);
     });
 
     Then(/^the response should contain JSON:$/, function (this: AbstractWorld, docString: string) {
-      const expectedPartialContent = JSON.parse(docString);
+      const expectedPartialContent = JSON.parse(SharedStorage.replacePlaceholders(docString));
       const actualContent = SharedStorage.get(API_RESPONSE_KEY).body;
 
       DeepPartialMatcher.containsPartialDeep(actualContent, expectedPartialContent);

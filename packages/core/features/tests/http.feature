@@ -25,9 +25,15 @@ Feature: HTTP
     Then the response code should be 400
 
   Scenario: Send Request with custom header
-    Given I set the request header "Authorization" to "Bearer token"
+    Given I store the key "accessToken" with the value "token"
+    Given I store the key "itemName" with the value "New Item"
+    Given I set the request header "Authorization" to "Bearer {{accessToken}}"
     When I send a POST request to API "/item" with JSON:
       """
-      { "name": "New Item" }
+      { "name": "{{itemName}}" }
       """
     Then the response code should be 201
+    And the response should contain JSON:
+      """
+      { "_id": "*", "name": "{{itemName}}" }
+      """

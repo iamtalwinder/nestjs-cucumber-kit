@@ -25,10 +25,11 @@ Feature: GraphQL API interaction
       """
 
   Scenario: Successfully create a new item
+    Given I store the key "itemName" with the value "New Item"
     Given I send a GraphQL request to "/graphql" with the payload:
       """
       mutation {
-        createItem(createItemInput: { name: "New Item" }) {
+        createItem(createItemInput: { name: "{{itemName}}" }) {
           _id
           name
         }
@@ -40,7 +41,7 @@ Feature: GraphQL API interaction
         "data": {
           "createItem": {
             "_id": "*",
-            "name": "New Item"
+            "name": "{{itemName}}"
           }
         }
       }

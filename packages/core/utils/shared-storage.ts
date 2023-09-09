@@ -25,7 +25,7 @@ export class SharedStorage {
   }
 
   static replacePlaceholders(text: string): string {
-    return text.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    return text?.replace(/\{\{(\w+)\}\}/g, (match, key) => {
       const value = SharedStorage.get(key);
       if (value === undefined) {
         throw new Error(`No value found in SharedStorage for key: ${key}`);
