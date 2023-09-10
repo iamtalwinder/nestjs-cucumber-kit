@@ -4,13 +4,14 @@ Feature: MongoDB
     Given I load fixture from the file "fixture/item.fixture"
 
   Scenario: Find a single item and store the result
+    Given I store the key "itemName" with the value "test"
     When I findOne in model "Item" with JSON and store in "item":
       """
-      { "name": "test" }
+      { "name": "{{itemName}}" }
       """
     Then the key "item" should contain JSON:
       """
-      { "_id": "1", "name": "test" }
+      { "_id": "1", "name": "{{itemName}}" }
       """
 
   Scenario: Assert exact match for a single item
