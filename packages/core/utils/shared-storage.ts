@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { PathExtractor } from './path-extractor';
 
 export class SharedStorage {
   private static storage: Record<string, any> = {};
@@ -8,7 +9,11 @@ export class SharedStorage {
   }
 
   static get(key: string): any {
-    return SharedStorage.storage[key];
+    try {
+      return PathExtractor.getValueFromPath(SharedStorage.storage, key);
+    } catch (e) {
+      return undefined;
+    }
   }
 
   static clear() {
@@ -25,7 +30,7 @@ export class SharedStorage {
   }
 
   static replacePlaceholders(text: string): string {
-    return text?.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    return text?.replace(/\{\{([^\}]+)\}\}/g, (match, key) => {
       const value = SharedStorage.get(key);
       if (value === undefined) {
         throw new Error(`No value found in SharedStorage for key: ${key}`);

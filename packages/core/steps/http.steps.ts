@@ -6,7 +6,7 @@ import supertest from 'supertest';
 import { AbstractWorld } from '../abstract.world';
 import { IStepDefinition } from './step-definition.interface';
 import { SharedStorage } from '..';
-import { DeepPartialMatcher } from '../utils';
+import { DeepPartialMatcher, PathExtractor } from '../utils';
 
 const API_RESPONSE_KEY = 'api_response';
 const REQUEST_DATA_KEY = 'request_data';
@@ -52,6 +52,15 @@ export class HttpSteps implements IStepDefinition {
 
         const response = await request.send(processedBody);
         SharedStorage.set(API_RESPONSE_KEY, response);
+      },
+    );
+
+    Given(
+      /^I store the key "([^"]*)" with the value from the response at path "([^"]*)"$/,
+      function (this: AbstractWorld, key: string, path: string) {
+        const response = SharedStorage.get(API_RESPONSE_KEY);
+        const value = PathExtractor.getValueFromPath(response, path);
+        SharedStorage.set(key, value);
       },
     );
 

@@ -43,3 +43,20 @@ Feature: storage
       { "_id": "1", "name": "test" }
       """
 
+  Scenario: Assert nested data
+    Given I load key-value pairs from the JSON file "user.json"
+    Given I load key-value pairs from the JSON file "item.json"
+    And the key "user.name" should have the value "John Doe"
+    And the key "items[0]._id" should have the value "1"
+
+
+  Scenario: Send request by extracting nested data
+    Given I load key-value pairs from the JSON file "item.json"
+    Given I send a GET request to API "/item/{{items[0]._id}}"
+    And I store the response in key "itemResponse"
+    Then the key "itemResponse" should contain JSON:
+      """
+      { "_id": "1", "name": "test" }
+      """
+
+  
