@@ -1,4 +1,4 @@
-# features/premitive.feature
+# features/primitive.feature
 
 Feature: Primitive value responses
 

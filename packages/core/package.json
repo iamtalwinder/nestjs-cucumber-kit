@@ -1,15 +1,14 @@
 {
   "name": "@nestjs-cucumber-kit/core",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Nestjs cucumber kit core",
   "author": "Talwinder Singh",
   "license": "MIT",
   "url": "https://github.com/iamtalwinder/nestjs-cucumber-kit.git#readme",
+  "keywords": ["nestjs", "cucumber", "bdd", "testing", "e2e", "typescript"],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "format": "prettier --write ./**/*.ts",
-    "lint": "eslint './**/*.ts' --fix",
     "build": "rimraf -rf dist && tsc -p tsconfig.json",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public",
@@ -17,7 +16,6 @@
     "test:unit": "jest --config ./jest.json --roots ./",
     "test:e2e": "cucumber-js"
   },
-  "keywords": [],
   "dependencies": {
     "@cucumber/cucumber": "^10.1.0",
     "chai": "^4.3.10",

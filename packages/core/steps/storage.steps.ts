@@ -58,5 +58,15 @@ export class StorageSteps implements IStepDefinition {
 
       DeepPartialMatcher.containsPartialDeep(actualValue, expectedValue);
     });
+
+    Then(/^the key "([^"]*)" should be truthy$/, function (this: AbstractWorld, key: string) {
+      const value = SharedStorage.get(key);
+      expect(value).to.be.ok;
+    });
+
+    Then(/^the key "([^"]*)" should be falsy$/, function (this: AbstractWorld, key: string) {
+      const value = SharedStorage.get(key);
+      expect(value).to.not.be.ok;
+    });
   }
 }

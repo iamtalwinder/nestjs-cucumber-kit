@@ -2,6 +2,11 @@
 
 All notable changes to `@nestjs-cucumber-kit/core` will be documented in this file.
 
+## [2.2.0]
+
+### Added
+- Add storage truthy & falsy assertion steps
+
 ## [2.1.0]
 
 ### Added
