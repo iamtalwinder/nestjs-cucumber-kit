@@ -2,6 +2,11 @@
 
 All notable changes to `@nestjs-cucumber-kit/mongodb` will be documented in this file.
 
+## [2.1.0] 
+
+### Added
+- Add mongodb truthy & falsy assertion steps
+
 ## [2.0.1] 
 
 ### Fixed

@@ -33,3 +33,16 @@ Feature: MongoDB
       """
       [{ "_id": "1", "name": "test" }, { "_id": "2", "name": "test" }]
       """
+
+  Scenario: Assert truthy & falsy
+    When I findOne in model "Item" with JSON:
+      """
+      { "name": "test" }
+      """
+    Then the result should be truthy
+    And I findOne in model "Item" with JSON:
+      """
+      { "name": "test12344" }
+      """
+    Then the result should be falsy
+

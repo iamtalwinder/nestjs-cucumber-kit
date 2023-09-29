@@ -1,6 +1,7 @@
 import { Then } from '@cucumber/cucumber';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { expect } from 'chai';
 import { IStepDefinition, SharedStorage, AbstractWorld, DeepPartialMatcher } from '@nestjs-cucumber-kit/core';
 
 const MONGODB_RESULT_KEY = 'mongodb_result';
@@ -41,7 +42,17 @@ export class MongoDBSteps implements IStepDefinition {
       const result = SharedStorage.get(MONGODB_RESULT_KEY);
       const expectedValue = JSON.parse(SharedStorage.replacePlaceholders(expectedJson));
 
-      expect(result).toEqual(expectedValue);
+      expect(result).to.deep.equal(expectedValue);
+    });
+
+    Then(/^the result should be truthy$/, function (this: AbstractWorld) {
+      const result = SharedStorage.get(MONGODB_RESULT_KEY);
+      expect(result).to.be.ok;
+    });
+
+    Then(/^the result should be falsy$/, function (this: AbstractWorld) {
+      const result = SharedStorage.get(MONGODB_RESULT_KEY);
+      expect(result).to.not.be.ok;
     });
   }
 
