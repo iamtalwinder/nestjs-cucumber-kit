@@ -10,7 +10,7 @@ Feature: storage
     Given I store the key "name" with the value "John Doe"
     Given I store the key "user" with the JSON data:
       """
-      { "name": "{{name}}", "age": 30 }
+      { "name": "John Doe", "age": 30 }
       """
     And the key "user" should contain JSON:
       """
