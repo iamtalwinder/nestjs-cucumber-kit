@@ -1,6 +1,6 @@
 {
   "name": "@nestjs-cucumber-kit/mongodb",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Nestjs cucumber kit mongodb",
   "author": "Talwinder Singh",
   "license": "MIT",

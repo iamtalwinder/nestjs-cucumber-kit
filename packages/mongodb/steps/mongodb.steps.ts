@@ -32,25 +32,22 @@ export class MongoDBSteps implements IStepDefinition {
 
     Then(/^the result should contain JSON:$/, async function (this: AbstractWorld, expectedJson: string) {
       const result = SharedStorage.get(MONGODB_RESULT_KEY);
-      const expectedValue = JSON.parse(expectedJson);
+      const expectedValue = JSON.parse(SharedStorage.replacePlaceholders(expectedJson));
 
       DeepPartialMatcher.containsPartialDeep(result, expectedValue);
     });
 
-    Then(
-      /^the result should exactly match JSON::$/,
-      async function (this: AbstractWorld, matchType: 'partial' | 'exact', expectedJson: string) {
-        const result = SharedStorage.get(MONGODB_RESULT_KEY);
-        const expectedValue = JSON.parse(expectedJson);
+    Then(/^the result should exactly match JSON:$/, async function (this: AbstractWorld, expectedJson: string) {
+      const result = SharedStorage.get(MONGODB_RESULT_KEY);
+      const expectedValue = JSON.parse(SharedStorage.replacePlaceholders(expectedJson));
 
-        expect(result).toEqual(expectedValue);
-      },
-    );
+      expect(result).toEqual(expectedValue);
+    });
   }
 
   static async performDBOperation(this: AbstractWorld, operation: 'find' | 'findOne', modelName: string, json: string) {
     const model: Model<any> = this.app.get(getModelToken(modelName));
-    const criteria = JSON.parse(json);
+    const criteria = JSON.parse(SharedStorage.replacePlaceholders(json));
     return operation === 'find' ? await model.find(criteria).exec() : await model.findOne(criteria).exec();
   }
 }
