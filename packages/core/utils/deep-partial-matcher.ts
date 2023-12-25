@@ -1,9 +1,19 @@
 export class DeepPartialMatcher {
   static containsPartialDeep(actual, expected) {
-    const match = this.isPartialDeepMatch(actual, expected);
+    let match = false;
+
+    if (actual instanceof Object && expected instanceof Object) {
+      match = this.isPartialDeepMatch(actual, expected);
+    } else {
+      match = actual === expected;
+    }
 
     if (!match) {
-      throw new Error(`Mismatch found. Actual object: ${JSON.stringify(actual)}`);
+      const errorMessage = `Mismatch found! 
+      Actual object: ${actual instanceof Object ? JSON.stringify(actual) : actual}
+      Expected object: ${expected instanceof Object ? JSON.stringify(expected) : expected}
+      `;
+      throw new Error(errorMessage);
     }
 
     if (Array.isArray(expected)) {

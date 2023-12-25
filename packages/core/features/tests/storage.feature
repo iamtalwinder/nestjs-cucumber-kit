@@ -7,13 +7,14 @@ Feature: storage
     And the key "username" should have the value "John Doe"
 
   Scenario: Store json
+    Given I store the key "name" with the value "John Doe"
     Given I store the key "user" with the JSON data:
       """
-      { "name": "John Doe", "age": 30 }
+      { "name": "{{name}}", "age": 30 }
       """
     And the key "user" should contain JSON:
       """
-      { "name": "John Doe", "age": 30 }
+      { "name": "{{name}}", "age": 30 }
       """
 
   Scenario: Load key-value pairs from a JSON file

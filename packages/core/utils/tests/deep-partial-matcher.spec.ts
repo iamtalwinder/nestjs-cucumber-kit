@@ -8,6 +8,16 @@ describe('DeepPartialMatcher', () => {
       expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).not.toThrow();
     });
 
+    it('should match null values', () => {
+      expect(() => DeepPartialMatcher.containsPartialDeep(null, null)).not.toThrow();
+    });
+
+    it('should not match null and object', () => {
+      const actual = null;
+      const expected = { id: '1', name: 'test' };
+      expect(() => DeepPartialMatcher.containsPartialDeep(actual, expected)).toThrow();
+    });
+
     it('should match an object with additional properties', () => {
       const actual = { id: '1', name: 'test', extra: 'field' };
       const expected = { id: '1', name: 'test' };

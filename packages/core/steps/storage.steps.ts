@@ -39,7 +39,7 @@ export class StorageSteps implements IStepDefinition {
       /^the key "([^"]*)" should have the value "([^"]*)"$/,
       function (this: AbstractWorld, key: string, expectedValue: string) {
         const actualValue = SharedStorage.get(key);
-        expect(actualValue).to.deep.equal(expectedValue);
+        expect(actualValue).to.deep.equal(SharedStorage.replacePlaceholders(expectedValue));
       },
     );
 
@@ -47,14 +47,14 @@ export class StorageSteps implements IStepDefinition {
       /^the key "([^"]*)" should exactly match JSON:$/,
       function (this: AbstractWorld, key: string, expectedJson: string) {
         const actualValue = SharedStorage.get(key);
-        const expectedValue = JSON.parse(expectedJson);
+        const expectedValue = JSON.parse(SharedStorage.replacePlaceholders(expectedJson));
         expect(actualValue).to.deep.equal(expectedValue);
       },
     );
 
     Then(/^the key "([^"]*)" should contain JSON:$/, function (this: AbstractWorld, key: string, expectedJson: string) {
       const actualValue = SharedStorage.get(key);
-      const expectedValue = JSON.parse(expectedJson);
+      const expectedValue = JSON.parse(SharedStorage.replacePlaceholders(expectedJson));
 
       DeepPartialMatcher.containsPartialDeep(actualValue, expectedValue);
     });
