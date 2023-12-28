@@ -24,6 +24,11 @@ Feature: HTTP
       """
     Then the response code should be 400
 
+  Scenario: Store specific response path in storage
+    Given I send a GET request to API "/item"
+    Given I store the key "test" with the value from the response at path "body[0]._id"
+    Then the key "test" should have the value "1"
+
   Scenario: Send Request with custom header
     Given I store the key "accessToken" with the value "token"
     Given I store the key "itemName" with the value "New Item"

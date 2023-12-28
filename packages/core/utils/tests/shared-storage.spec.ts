@@ -39,6 +39,14 @@ describe('SharedStorage', () => {
       expect(result).toBe('This is a value1');
     });
 
+    it('should replace placeholders with nested stored values', () => {
+      const filePath = path.join(__dirname, 'data', 'test.json');
+
+      SharedStorage.loadJsonFile(filePath);
+      const result = SharedStorage.replacePlaceholders('This is a {{key3[0].item}}');
+      expect(result).toBe('This is a 1');
+    });
+
     it('should throw an error for undefined keys', () => {
       expect(() => {
         SharedStorage.replacePlaceholders('This is a {{key2}}');

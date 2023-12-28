@@ -2,6 +2,14 @@
 
 All notable changes to `@nestjs-cucumber-kit/core` will be documented in this file.
 
+## [2.1.0]
+
+### Added
+- Path Extractor functionality to enable value extraction from JSON objects.
+- Support for nested path variable replacement in JSON structures.
+- Enhanced extraction capabilities for nested path values from API responses.
+
+
 ## [2.0.2]
 
 ### Fixed
