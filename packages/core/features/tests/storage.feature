@@ -59,4 +59,12 @@ Feature: storage
       { "_id": "1", "name": "test" }
       """
 
+  Scenario: Assert truthy & falsy
+    Given I store the key "itemId" with the value "1"
+    Given I store the key "test" with the value ""
+    Then the key "itemId" should be truthy
+    Then the key "test" should be falsy
+
+
+
   
